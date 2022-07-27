@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogAPI.Migrations
 {
     [DbContext(typeof(BlogAPIContext))]
-    [Migration("20220727042602_initialMigration")]
+    [Migration("20220727044111_initialMigration")]
     partial class initialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -163,8 +163,7 @@ namespace BlogAPI.Migrations
                         .WithMany("Posts")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_Category_Post");
+                        .IsRequired();
 
                     b.Navigation("Author");
 

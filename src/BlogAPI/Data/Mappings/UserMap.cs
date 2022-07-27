@@ -37,12 +37,6 @@ namespace BlogAPI.Data.Mappings
                 .IsRequired(false)
                 .HasMaxLength(255)
                 .HasColumnType("NVARCHAR");
-
-            builder.HasMany(x => x.Posts)
-                .WithOne(x => x.Author)
-                .HasForeignKey("AuthorId")
-                .HasConstraintName("FK_Post_User")
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

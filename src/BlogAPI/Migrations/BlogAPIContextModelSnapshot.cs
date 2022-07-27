@@ -161,8 +161,7 @@ namespace BlogAPI.Migrations
                         .WithMany("Posts")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_Category_Post");
+                        .IsRequired();
 
                     b.Navigation("Author");
 

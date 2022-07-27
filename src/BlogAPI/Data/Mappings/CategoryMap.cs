@@ -15,12 +15,6 @@ namespace BlogAPI.Data.Mappings
                 .IsRequired()
                 .HasMaxLength(20)
                 .HasColumnType("NVARCHAR");
-
-            builder.HasMany(x => x.Posts)
-                .WithOne(x => x.Category)
-                .HasForeignKey("CategoryId")
-                .HasConstraintName("FK_Category_Post")
-                .OnDelete(DeleteBehavior.Cascade);  
         }
     }
 }
