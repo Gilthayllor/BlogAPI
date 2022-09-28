@@ -12,7 +12,7 @@ namespace BlogAPI.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=BlogDatabase;User Id=sa;Password=@sqlserver2022");
+            optionsBuilder.UseSqlServer("Server=localhost;Database=BlogDatabase;User Id=sa;Password=sqlserver@22");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
