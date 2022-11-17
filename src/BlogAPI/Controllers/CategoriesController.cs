@@ -6,6 +6,7 @@ using BlogAPI.ViewModels.Category;
 using BlogAPI.ViewModels.Result;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BlogAPI.Controllers
 {
@@ -14,18 +15,25 @@ namespace BlogAPI.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly BlogAPIContext _context;
+        private readonly IMemoryCache _cache;
 
-        public CategoriesController(BlogAPIContext context)
+        public CategoriesController(BlogAPIContext context, IMemoryCache cache)
         {
             _context = context;
+            _cache = cache;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync()
         {
             try
             {
-                var categories = await _context.Categories.ToListAsync();
+                var categories = await _cache.GetOrCreateAsync("CategoriesCache", async x =>
+                {
+                    x.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+                    return await _context.Categories.ToListAsync();
+                });
+
                 return Ok(new ResultViewModel<List<Category>>(categories));
             }
             catch (Exception)
@@ -35,7 +43,7 @@ namespace BlogAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
             try
             {
@@ -54,7 +62,7 @@ namespace BlogAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] EditorCategoryViewModel category) 
+        public async Task<IActionResult> PostAsync([FromBody] EditorCategoryViewModel category) 
         {
             if (!ModelState.IsValid)
             {
@@ -71,7 +79,7 @@ namespace BlogAPI.Controllers
                 await _context.Categories.AddAsync(newCategory);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetById), new { id = newCategory.Id }, new ResultViewModel<Category>(newCategory));
+                return CreatedAtAction(nameof(GetByIdAsync), new { id = newCategory.Id }, new ResultViewModel<Category>(newCategory));
             }
             catch(DbUpdateException e)
             {
@@ -84,7 +92,7 @@ namespace BlogAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] EditorCategoryViewModel category)
+        public async Task<IActionResult> PutAsync([FromRoute] int id, [FromBody] EditorCategoryViewModel category)
         {
             if (!ModelState.IsValid)
             {
@@ -118,7 +126,7 @@ namespace BlogAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
         {
             try
             {
