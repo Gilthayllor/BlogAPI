@@ -4,6 +4,7 @@ using BlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogAPI.Migrations
 {
     [DbContext(typeof(BlogAPIContext))]
-    partial class BlogAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20221103104306_AlteracaoTamanhoColunaPasswordUser")]
+    partial class AlteracaoTamanhoColunaPasswordUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,8 +125,7 @@ namespace BlogAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("About")
-                        .HasMaxLength(100)
-                        .HasColumnType("NVARCHAR(100)");
+                        .HasColumnType("NVARCHAR");
 
                     b.Property<string>("Email")
                         .IsRequired()
