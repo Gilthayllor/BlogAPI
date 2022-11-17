@@ -1,4 +1,4 @@
-﻿namespace BlogAPI.ViewModels
+﻿namespace BlogAPI.ViewModels.Result
 {
     public class ResultViewModel<T>
     {
