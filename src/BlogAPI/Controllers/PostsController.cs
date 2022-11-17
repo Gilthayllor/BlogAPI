@@ -1,5 +1,6 @@
 ﻿using BlogAPI.Data;
 using BlogAPI.Models;
+using BlogAPI.ViewModels.Posts;
 using BlogAPI.ViewModels.Result;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,10 +23,15 @@ namespace BlogAPI.Controllers
         {
             var posts = await _context.Posts
                 .AsNoTracking()
-                .Select(x => new
+                .Include(x => x.Category)
+                .Include(x => x.Author)
+                .Select(x => new ListPostsViewModel
                 {
-                    x.Id,
-                    x.Title
+                    Id = x.Id,
+                    Author = $"{x.Author.Name} ({x.Author.Email})",
+                    Category = x.Category.Name,
+                    LastUpdateDate = x.UpdatedAt,
+                    Title = x.Title
                 })
                 .ToListAsync();
 
