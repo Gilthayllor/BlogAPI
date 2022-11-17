@@ -24,10 +24,12 @@ namespace BlogAPI.Controllers
                 .AsNoTracking()
                 .Select(x => new
                 {
+                    x.Id,
+                    x.Title
                 })
                 .ToListAsync();
 
-            return Ok(new ResultViewModel<List<Post>>(posts));
+            return Ok();
         }
     }
 }
