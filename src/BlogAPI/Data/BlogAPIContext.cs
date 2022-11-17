@@ -10,9 +10,9 @@ namespace BlogAPI.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<Category> Categories { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public BlogAPIContext(DbContextOptions<BlogAPIContext> options) : base(options)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=BlogDatabase;User Id=sa;Password=sqlserver@22");
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

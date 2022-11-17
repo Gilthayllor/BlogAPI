@@ -8,9 +8,12 @@ namespace BlogAPI.Controllers
     public class HomeController : ControllerBase
     {
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get([FromServices] IConfiguration configuration)
         {
-            return Ok();
+            var env = configuration.GetValue<string>("Env");
+            return Ok(new { 
+                environment = env
+            });
         }
     }
 }

@@ -3,7 +3,9 @@ using BlogAPI.Data;
 using BlogAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -19,12 +21,17 @@ var app = builder.Build();
 
 LoadConfigration(app);
 
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapControllers();
 app.UseResponseCompression();
 
-app.MapControllers();
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
 
 app.Run();
 
@@ -83,6 +90,12 @@ void ConfigureMvc(WebApplicationBuilder builder)
 
 void ConfigureServices(WebApplicationBuilder builder)
 {
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     builder.Services.AddTransient<TokenService>();
-    builder.Services.AddDbContext<BlogAPIContext>();
+    builder.Services.AddDbContext<BlogAPIContext>(x => {
+        x.UseSqlServer(connectionString);
+    });
+
+    //builder.Services.AddEndpointsApiExplorer();
+    //builder.Services.AddSwaggerGen();
 }
