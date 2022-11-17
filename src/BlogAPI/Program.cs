@@ -27,11 +27,14 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseResponseCompression();
 
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(x => {
+        x.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        x.RoutePrefix = string.Empty;
+    });
+}
 
 app.Run();
 
@@ -96,6 +99,7 @@ void ConfigureServices(WebApplicationBuilder builder)
         x.UseSqlServer(connectionString);
     });
 
-    //builder.Services.AddEndpointsApiExplorer();
-    //builder.Services.AddSwaggerGen();
+    builder.Services.AddEndpointsApiExplorer();
+    
+    builder.Services.AddSwaggerGen();
 }
